@@ -31,7 +31,10 @@ const cloneUser = JSON.parse(JSON.stringify(persone));
 console.log(persone);
 console.log(cloneUser);
 
+//edis cloneUser.parents.mom
 cloneUser.parents.mom = false;
 
-console.log(persone);
-console.log(cloneUser);
+console.log("/////////////");
+
+console.log(persone.parents.mom);
+console.log(cloneUser.parents.mom);
