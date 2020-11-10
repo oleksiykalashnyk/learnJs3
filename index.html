@@ -7,13 +7,32 @@
     <title>JavaScript part 3</title>
     <link rel="stylesheet" href="style.css">
     <link rel="shortcut icon" href="favicon.png" type="image/png">
+
 </head>
 
 <body>
+    <div class="x">
+        <label for="x_rub">RUB</label>
+        <input id="x_rub" type="text">
+        <label for="x_usd">USD</label>
+        <input id="x_usd" type="text">
+        
+        <div class="x_block">
+            <p class="x_block-text">
 
+            </p>
+        </div>
+    </div>
+    
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="js/script.js"></script>
 
-    <script src="script.js"></script>
+    <script>
+        $("#rub").click(e => {
+            e.target.style.backgroundColor = "red";
+        });
+    </script>
 </body>
 
 </html>
