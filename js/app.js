@@ -288,7 +288,7 @@ window.addEventListener("DOMContentLoaded", () => {
             e.preventDefault();
 
             const statusMessage = document.createElement("img");
-            statusMessage.src = message.loading; 
+            statusMessage.src = message.loading;
 
             statusMessage.style.cssText = `
                 display: block;
@@ -297,11 +297,8 @@ window.addEventListener("DOMContentLoaded", () => {
             `;
 
             // form.append(statusMessage);
+            form.insertAdjacentElement("afterend", statusMessage);
 
-            form.insertAdjacentElement("afterend",statusMessage);
-            const request = new XMLHttpRequest();
-            request.open("POST", "server.php");
-            request.setRequestHeader("Conten-type", "application/json");
 
             //create new exempel class FormData
             const formData = new FormData(form);
@@ -311,29 +308,57 @@ window.addEventListener("DOMContentLoaded", () => {
                 object[key] = value;
             });
 
-            const json = JSON.stringify(object);
+            //old style REQUEST for server
 
+            //     const request = new XMLHttpRequest();
+            //     request.open("POST", "server.php");
 
-            request.send(json);
+            // const json = JSON.stringify(object);
 
-            request.addEventListener("load", () => {
-                if (request.status === 200) {
+            //     request.send(json);
 
-                    console.log(request.response);
+            //     request.addEventListener("load", () => {
+            //         if (request.status === 200) {
 
-                    showThanksModal(message.success);
-                    
-                    form.reset();
+            //             console.log(request.response);
 
-                    statusMessage.remove();
+            //             showThanksModal(message.success);
 
-                } else {
-                    showThanksModal(message.fail);
-                }
+            //             form.reset();
+
+            //             statusMessage.remove();
+
+            //         } else {
+            //             showThanksModal(message.fail);
+            //         }
+            //     });
+
+            // });
+
+            //FETCH METHOD
+            fetch("server.php", {
+                method: "POST",
+                headers: {
+                    "Conten-type": "application/json"
+                },
+                body: JSON.stringify(object)
+            })
+            .then(data => data.text())
+            .then(data => {
+                console.log(data);
+                showThanksModal(message.success);
+                statusMessage.remove();
+            })
+            .catch(() => {
+                showThanksModal(message.fail);
+            })
+            .finally(() => {
+                form.reset();
             });
-
         });
     }
+
+
 
 
     function showThanksModal(message) {
