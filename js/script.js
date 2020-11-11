@@ -1,37 +1,84 @@
 'use strict';
 
-//Learn AJAX
-
-const
-    inputRub = document.querySelector("#rub"),
-    inputUsd = document.querySelector("#usd");
-
-inputRub.addEventListener("input", () => {
-
-    const request = new XMLHttpRequest();
-
-    request.open("GET", "js/current.json");
-    request.setRequestHeader('Content-type', "application/json", "charset=utf-8");
-    request.send();
+//Learn PROMISE
 
 
-    //First type add event for request "rearystatechange"
-    request.addEventListener("readystatechange", () => {
-        if (request.readyState === 4 && request.status === 200) {
-            const data = JSON.parse(request.response);
-            inputUsd.value = (+inputRub.value / data.current.usd).toFixed(2);
-        } else {
-            inputUsd.value = "Problem in server";
-        }
+
+//1. New promise
+const req = new Promise((resolve, reject) => {
+
+    //simulate server request and w8 response
+    setTimeout(() => {
+        console.log("Create new object response");
+
+        const product = {
+            name: "2. TV",
+            price: 2000
+        };
+
+        resolve(product);
+
+    }, 2000);
+});
+
+//if  "resolve", show console message
+req.then(() => {
+    console.log("First request send.");
+});
+
+
+req.then((product) => {
+
+    new Promise((resolve, reject) => {
+
+            //simulate server request and w8 response
+            setTimeout(() => {
+                product.status = "order";
+                resolve(product);
+            }, 3000);
+
+        })
+
+        .then(data => {
+            data.modify = true;
+            return data;
+        })
+
+        .then(data => {
+            console.log(data);
+        })
+
+        .catch(() => {
+            console.error("Error");
+        })
+
+        .finally(() => {
+            console.log("OK");
+        });
+
+});
+
+
+//2. Promise  .all() and .race() 
+
+const test = time => {
+    return new Promise(resolve => {
+        setTimeout(() => resolve(), time);
     });
+};
 
-    //Second type listen event for request => "load"
-    request.addEventListener("load", () => {
-        if (request.readyState === 4) {
-            const data = JSON.parse(request.response);
-            inputUsd.value = (+inputRub.value / data.current.usd).toFixed(2);
-        } else {
-            inputUsd.value = "Problem in server";
-        }
-    });
+test(1000).then(()=>{
+    console.log("1000 ms");
+});
+
+test(2000).then(()=>{
+    console.log("2000 ms");
+});
+
+Promise.all([test(1000),test(2000)]).then(()=>{
+    console.log("ALL - ready !!!");
+});
+
+Promise.race([test(1000),test(2000)]).then(()=>{
+    console.log("RACE - work !!!");
 });
